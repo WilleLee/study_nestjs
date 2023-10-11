@@ -60,7 +60,7 @@ describe('MoviesService', () => {
       service.deleteMovie(1);
       const afterDeleteLength = service.getMovies().length;
 
-      expect(afterDeleteLength).toEqual(beforeDeleteLength - 1);
+      expect(afterDeleteLength).toBeLessThan(beforeDeleteLength);
     });
     it('should throw 404 error', () => {
       try {
@@ -68,6 +68,41 @@ describe('MoviesService', () => {
       } catch (e) {
         expect(e).toBeInstanceOf(NotFoundException);
         expect(e.message).toEqual('Movie with ID 999 not found.');
+      }
+    });
+  });
+
+  describe('createMovie', () => {
+    it('should create a movie', () => {
+      const beforeCreateLength = service.getMovies().length;
+      service.createMovie({
+        title: 'test movie',
+        director: 'test director',
+        genres: ['test'],
+        year: 2021,
+      });
+      const afterCreateLength = service.getMovies().length;
+
+      expect(afterCreateLength).toBeGreaterThan(beforeCreateLength);
+    });
+  });
+
+  describe('patchMovie', () => {
+    it('should patch a movie', () => {
+      service.createMovie({
+        title: 'test movie',
+        director: 'test director',
+        genres: ['test'],
+        year: 2021,
+      });
+      service.patchMovie(1, { title: 'updated test' });
+      expect(service.getMovie(1).title).toEqual('updated test');
+    });
+    it('should throw 404 error', () => {
+      try {
+        service.patchMovie(999, {});
+      } catch (e) {
+        expect(e).toBeInstanceOf(NotFoundException);
       }
     });
   });

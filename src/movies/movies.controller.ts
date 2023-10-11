@@ -38,6 +38,8 @@ export class MoviesController {
     // console.log(typeof movieId);
     // const foundMovie = movies.find((movie) => movie.id === +movieId);
     // return foundMovie || null;
+    console.log(typeof movieId);
+    console.log(this.moviesService.getMovies());
     return this.moviesService.getMovie(movieId);
   }
 
